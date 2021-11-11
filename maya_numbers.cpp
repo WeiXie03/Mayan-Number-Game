@@ -11,24 +11,6 @@
 
 using namespace std;
 
-int num_places(int dec) {
-    // counts the total number of places in the decimal number
-    int plcs = 0;
-    while (dec > 0)
-    {
-        dec /= 10;
-        plcs++;
-    }
-    return plcs;
-}
-
-/*
-int place_multiple(int num, int base, int place) {
-    // returns the multiple/digit of the specified place in the input number of specified base system
-    return num ;
-}
-*/
-
 void print_fives(int num) {
     for (int i=0; i < num; ++i)
     {
@@ -65,30 +47,68 @@ void print_vigit(int num) {
     cout << string(8, '_') << endl;
 }
 
-void printMayanNumber(int dec) {
-    // convert to base 20, by successively dividing by 20
-    int plc = 0;
-    while (dec > 0)
+int num_places(int num, int base) {
+    // counts the total number of places in the number in the specified base system
+    int plcs = 0;
+    while (num > 0)
     {
-        dec /= 20;
-        
-        plc++;
+        num /= base;
+        plcs++;
+    }
+    return plcs;
+}
+
+/*
+int place_multiple(int num, int base, int place) {
+    // returns the multiple/digit of the specified place in the input number of specified base system, ones place is 0th
+    // "trim" preceding digits
+    num %= (int) pow(base, place+1);
+    // "trim" trailing digits
+    num /= pow(base, place);
+    return num;
+}
+*/
+
+void printMayanNumber(int innum) {
+    // go through vigesimal "vigits", greatest to least place
+    int plc = num_places(innum, 20);
+    int divor = pow(20, plc);
+
+    // initial check, should not print a zero at start/top
+    if (innum/divor == 0) {
+        plc--;
+        divor /= 20;
+    }
+
+    for ( ; plc >= 0; plc--)
+    {
+        // start with the vigit
+        //divid = place_multiple(innum, 20, plc);
+        cout << innum <<", "<< plc << " places" << endl;
+
+        // rem is what's still left to process, dividend is "vigit" in current plc, so print it
+        print_vigit( innum / divor );
+        innum %= divor;
+
+        divor /= 20;
     }
 }
 
 int main() {
-    /*
     int innum;
     cout << "Enter decimal number: ";
     cin >> innum;
-    */
+
+    printMayanNumber(innum);
 
     //cout << num_places(innum) << endl;
+    /*
     int test [] = {0, 4, 5, 17};
     for (int num : test)
     {
         print_vigit(num);
     }
+    */
 
     return 0;
 }
