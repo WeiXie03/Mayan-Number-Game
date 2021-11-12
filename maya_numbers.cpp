@@ -94,10 +94,37 @@ void printMayanNumber(int innum) {
     }
 }
 
+int get_usr_int(int thresh) {
+    // with input checking, will keep prompting if invalid
+    int inp=0;
+    cout << "Enter your decimal integer >= 10: ";
+    cin >> inp;
+
+    while (!(cin))
+    {
+        cout << "Not an integer. Please enter an integer: ";
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cin >> inp;
+    } 
+
+    if (inp < thresh) {
+        // alert/error code
+        return -1;
+    }
+
+    return inp;
+}
+
+const int USR_NUM_MIN = 10;
+
 int main() {
     int innum;
-    cout << "Enter decimal number: ";
-    cin >> innum;
+    innum = get_usr_int(USR_NUM_MIN);
+    if (innum == -1) {
+        // returned exit code
+        return 0;
+    }
 
     printMayanNumber(innum);
 
